@@ -21,7 +21,11 @@ jobs:
       - name: hello
         run: |
           echo "IN WORKFLOW HELLO STEP"
-          
+
       - name: step-two
         run: |
           echo "IN SECOND PULL STEP"
+
+      - name: my-name-is
+        run: |
+          echo "Hello my name is: ${{ secrets.MY_NAME }}"

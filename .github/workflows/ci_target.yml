@@ -14,12 +14,17 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
         with:
+          ref: ${{ github.event.pull_request.head.sha }}
           submodules: true
 
       - name: hello-target
         run: |
           echo "IN TARGET WORKFLOW HELLO STEP"
-          
+
       - name: target-step-2
         run: |
           echo "IN TARGET STEP TWO"
+
+      - name: my-target-name-is
+        run: |
+          echo "Hello my name is: ${{ secrets.MY_NAME }}"
