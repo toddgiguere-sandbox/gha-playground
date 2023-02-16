@@ -21,3 +21,7 @@ jobs:
       - name: hello
         run: |
           echo "IN WORKFLOW HELLO STEP"
+          
+      - name: step-two
+        run: |
+          echo "IN SECOND PULL STEP"
