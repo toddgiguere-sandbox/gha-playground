@@ -19,3 +19,7 @@ jobs:
       - name: hello-target
         run: |
           echo "IN TARGET WORKFLOW HELLO STEP"
+          
+      - name: target-step-2
+        run: |
+          echo "IN TARGET STEP TWO"
