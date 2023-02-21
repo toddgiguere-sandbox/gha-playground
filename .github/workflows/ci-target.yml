@@ -1,0 +1,33 @@
+name: main-ci-target
+
+on:
+  pull_request_target:
+    branches:
+      - main
+
+jobs:
+  approve:
+    runs-on: ubuntu-latest
+    environment: test-ext
+
+    steps:
+      - name: Approve Test Run
+        run: echo "Workflow must be approved"
+
+  CI_Target:
+    runs-on: ubuntu-latest
+
+    needs: [approve]
+
+    env:
+      THE_NAME: ${{ secrets.MY_NAME }}
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: approved-test-step-1
+        run: echo "RUNNING TEST STEP 1"
