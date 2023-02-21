@@ -11,6 +11,9 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
+    env:
+      THE_NAME: ${{ secrets.MY_NAME }}
+
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -28,4 +31,4 @@ jobs:
 
       - name: my-name-is
         run: |
-          echo "Hello my name is: ${{ secrets.MY_NAME }}"
+          echo "Hello my name is: $THE_NAME"
