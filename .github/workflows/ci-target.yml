@@ -16,6 +16,7 @@ jobs:
 
   CI_Target:
     runs-on: ubuntu-latest
+    environment: test-ext
 
     needs: [approve]
 
