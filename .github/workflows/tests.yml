@@ -18,6 +18,10 @@ jobs:
       THE_NAME: ${{ secrets.MY_NAME }}
 
     steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+
       - name: echo
         env:
           PULL_SHA: ${{ github.event.workflow_run.head_sha }}
