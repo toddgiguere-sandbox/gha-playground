@@ -37,7 +37,9 @@ jobs:
 
     steps:
       - name: Approve Test Run
-        run: echo "Workflow must be approved"
+        run: |
+          echo Using deployment environment: ${{ needs.choose_env.outputs.test_environment }}
+          echo "Workflow must be approved"
 
   CI_Target:
     needs: [approve]
