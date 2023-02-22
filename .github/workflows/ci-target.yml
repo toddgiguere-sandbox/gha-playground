@@ -6,20 +6,42 @@ on:
       - main
 
 jobs:
-  approve:
-    if: ${{ github.event.pull_request.head.repo.full_name != github.repository }}
+  choose_env:
     runs-on: ubuntu-latest
-    environment: test-ext
+    outputs:
+      test_environment: ${{ steps.check_fork.outputs.env_name }}
+    steps:
+      - name: check_fork
+        shell: bash
+        run: |
+          EVENT_NAME=${{ github.event_name }}
+          if [ $EVENT_NAME = "pull_request" ]; then
+            PULL_REPO=${{ github.event.pull_request.head.repo.full_name }}
+            THIS_REPO=${{ github.repository }}
+            if [ $PULL_REPO = $THIS_REPO ]; then
+              echo Using internal environment for pull_request
+              echo "env_name=test" >> "$GITHUB_OUTPUT"
+            else
+              echo Using external environment for fork pull_request
+              echo "env_name=test-ext" >> "$GITHUB_OUTPUT"
+            fi
+          else
+            echo Using internal environment for push
+            echo "env_name=test" >> "$GITHUB_OUTPUT"
+          fi
+
+  approve:
+    needs: [choose_env]
+    runs-on: ubuntu-latest
+    environment: ${{ needs.choose_env.outputs.test_environment }}
 
     steps:
       - name: Approve Test Run
         run: echo "Workflow must be approved"
 
   CI_Target:
-    runs-on: ubuntu-latest
-
     needs: [approve]
-
+    runs-on: ubuntu-latest
     env:
       THE_NAME: ${{ secrets.MY_NAME }}
 
