@@ -11,7 +11,7 @@ jobs:
     outputs:
       test_environment: ${{ steps.check_fork.outputs.env_name }}
     steps:
-      - name: check_fork
+      - id: check_fork
         shell: bash
         run: |
           EVENT_NAME=${{ github.event_name }}
