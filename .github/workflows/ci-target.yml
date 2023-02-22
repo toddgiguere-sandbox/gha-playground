@@ -15,7 +15,7 @@ jobs:
         shell: bash
         run: |
           EVENT_NAME=${{ github.event_name }}
-          if [ $EVENT_NAME = "pull_request" ]; then
+          if [[ "$EVENT_NAME" = "pull_request" || "$EVENT_NAME" = "pull_request_target" ]]; then
             PULL_REPO=${{ github.event.pull_request.head.repo.full_name }}
             THIS_REPO=${{ github.repository }}
             if [ $PULL_REPO = $THIS_REPO ]; then
