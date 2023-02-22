@@ -11,7 +11,7 @@ jobs:
     outputs:
       test_environment: ${{ steps.check_fork.outputs.env_name }}
     steps:
-      - name: check_fork
+      - id: check_fork
         shell: bash
         run: |
           EVENT_NAME=${{ github.event_name }}
@@ -37,7 +37,9 @@ jobs:
 
     steps:
       - name: Approve Test Run
-        run: echo "Workflow must be approved"
+        run: |
+          echo Using deployment environment: ${{ needs.choose_env.outputs.test_environment }}
+          echo "Workflow must be approved"
 
   CI_Target:
     needs: [approve]
