@@ -6,53 +6,6 @@ on:
       - main
 
 jobs:
-  choose_env:
-    runs-on: ubuntu-latest
-    outputs:
-      test_environment: ${{ steps.check_fork.outputs.env_name }}
-    steps:
-      - id: check_fork
-        shell: bash
-        run: |
-          EVENT_NAME=${{ github.event_name }}
-          if [[ "$EVENT_NAME" = "pull_request" || "$EVENT_NAME" = "pull_request_target" ]]; then
-            PULL_REPO=${{ github.event.pull_request.head.repo.full_name }}
-            THIS_REPO=${{ github.repository }}
-            if [ $PULL_REPO = $THIS_REPO ]; then
-              echo Using internal environment for pull_request
-              echo "env_name=test" >> "$GITHUB_OUTPUT"
-            else
-              echo Using external environment for fork pull_request
-              echo "env_name=test-ext" >> "$GITHUB_OUTPUT"
-            fi
-          else
-            echo Using internal environment for push
-            echo "env_name=test" >> "$GITHUB_OUTPUT"
-          fi
-
-  approve:
-    needs: [choose_env]
-    runs-on: ubuntu-latest
-    environment: ${{ needs.choose_env.outputs.test_environment }}
-
-    steps:
-      - name: Approve Test Run
-        run: |
-          echo Using deployment environment: ${{ needs.choose_env.outputs.test_environment }}
-          echo "Workflow must be approved"
-
-  CI_Target:
-    needs: [approve]
-    runs-on: ubuntu-latest
-    env:
-      THE_NAME: ${{ secrets.MY_NAME }}
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-
-      - name: approved-test-step-1
-        run: echo "RUNNING TEST STEP 1"
+  call-ci-test:
+    uses: toddgiguere-sandbox/gha-common/blob/main/.github/workflows/ci-test.yml@main
+    secrets: inherit
